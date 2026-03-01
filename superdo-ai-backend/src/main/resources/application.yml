@@ -1,0 +1,67 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+app:
+  database:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/superdo_ai}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:change-this-in-local-env}
+    driver-class-name: org.postgresql.Driver
+    ssl-enabled: ${DB_SSL_ENABLED:true}
+    ssl-mode: ${DB_SSL_MODE:require}
+    pool:
+      pool-name: superdo-hikari-pool
+      minimum-idle: ${DB_POOL_MIN_IDLE:5}
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
+      idle-timeout-ms: ${DB_POOL_IDLE_TIMEOUT_MS:600000}
+      max-lifetime-ms: ${DB_POOL_MAX_LIFETIME_MS:1800000}
+      connection-timeout-ms: ${DB_POOL_CONNECTION_TIMEOUT_MS:30000}
+      validation-timeout-ms: ${DB_POOL_VALIDATION_TIMEOUT_MS:5000}
+      leak-detection-threshold-ms: ${DB_POOL_LEAK_DETECTION_THRESHOLD_MS:0}
+  jwt:
+    secret: ${JWT_SECRET:change-this-to-a-long-secure-secret-at-least-256-bits-change-in-production}
+    access-expiration-ms: 900000
+  auth:
+    refresh-token-expiration-ms: 2592000000
+    refresh-cookie-name: superdo_refresh
+    refresh-cookie-secure: ${REFRESH_COOKIE_SECURE:true}
+    refresh-cookie-same-site: ${REFRESH_COOKIE_SAME_SITE:Lax}
+    csrf-cookie-name: ${CSRF_COOKIE_NAME:superdo_csrf}
+    csrf-header-name: ${CSRF_HEADER_NAME:X-CSRF-Token}
+    rate-limit:
+      login:
+        max-requests: ${AUTH_RATE_LIMIT_LOGIN_MAX_REQUESTS:8}
+        window-ms: ${AUTH_RATE_LIMIT_LOGIN_WINDOW_MS:300000}
+      google:
+        max-requests: ${AUTH_RATE_LIMIT_GOOGLE_MAX_REQUESTS:8}
+        window-ms: ${AUTH_RATE_LIMIT_GOOGLE_WINDOW_MS:300000}
+      refresh:
+        max-requests: ${AUTH_RATE_LIMIT_REFRESH_MAX_REQUESTS:25}
+        window-ms: ${AUTH_RATE_LIMIT_REFRESH_WINDOW_MS:300000}
+    google-client-id: ${GOOGLE_CLIENT_ID:}
+    admin-emails: ${ADMIN_EMAILS:}
+  security:
+    allowed-origins: ${ALLOWED_ORIGINS:http://localhost:3000,http://localhost:5173,http://localhost:5500,http://127.0.0.1:5500}
+  openai:
+    api-key: ${OPENAI_API_KEY:}
+    model: gpt-4o-mini
+    url: https://api.openai.com/v1/chat/completions
+  ai:
+    rate-limit:
+      max-requests: ${AI_RATE_LIMIT_MAX_REQUESTS:20}
+      window-ms: ${AI_RATE_LIMIT_WINDOW_MS:60000}

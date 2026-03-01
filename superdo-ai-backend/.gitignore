@@ -1,0 +1,91 @@
+# ========================
+# Environment & Secrets
+# ========================
+.env
+.env.*
+!.env.example
+
+# Spring Boot application secrets
+application-local.properties
+application-local.yml
+application-prod.properties
+application-prod.yml
+application-staging.properties
+application-staging.yml
+PROJECT_ARCHITECTURE.md
+TESTING_CHECKLIST.md
+
+# ========================
+# Maven Build Output
+# ========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ========================
+# Java
+# ========================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# ========================
+# Logs
+# ========================
+*.log
+logs/
+*.log.*
+
+# ========================
+# IDE - IntelliJ IDEA
+# ========================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ========================
+# IDE - Eclipse
+# ========================
+.eclipse/
+.settings/
+.project
+.classpath
+bin/
+
+# ========================
+# IDE - VS Code
+# ========================
+.vscode/
+*.code-workspace
+
+# ========================
+# IDE - NetBeans
+# ========================
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# ========================
+# OS Files
+# ========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ========================
+# Test & Coverage
+# ========================
+*.exec
+jacoco.exec
+/coverage/

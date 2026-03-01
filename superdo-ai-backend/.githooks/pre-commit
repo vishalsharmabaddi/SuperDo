@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+set -eu
+
+# Block committing env/secret files and obvious secret values.
+
+staged_files="$(git diff --cached --name-only --diff-filter=ACMR)"
+[ -z "$staged_files" ] && exit 0
+
+blocked_file_regex='(^|/)\.env($|\.|/)'
+
+echo "$staged_files" | while IFS= read -r file; do
+  if echo "$file" | grep -Eq "$blocked_file_regex"; then
+    echo "ERROR: Commit blocked. Secret file staged: $file"
+    echo "Use .env.example for placeholders, not real keys."
+    exit 1
+  fi
+done
+
+# Scan staged patch for common secret markers.
+if git diff --cached -U0 | grep -E '^\+.*(OPENAI_API_KEY|JWT_SECRET|GOOGLE_CLIENT_ID|DB_PASSWORD|AKIA[0-9A-Z]{16}|sk-[A-Za-z0-9_-]{16,})' >/dev/null 2>&1; then
+  echo "ERROR: Commit blocked. Possible secret detected in staged changes."
+  echo "Remove secrets from commit and keep them in local .env only."
+  exit 1
+fi
+
+exit 0
