@@ -6,9 +6,11 @@ import com.superdo.ai.entity.Expense;
 import com.superdo.ai.entity.MarriagePlanner;
 import com.superdo.ai.entity.Note;
 import com.superdo.ai.entity.RentRecord;
+import com.superdo.ai.entity.Loan;
 import com.superdo.ai.repository.CustomSectionEntryRepository;
 import com.superdo.ai.repository.CustomSectionRepository;
 import com.superdo.ai.repository.ExpenseRepository;
+import com.superdo.ai.repository.LoanRepository;
 import com.superdo.ai.repository.MarriagePlannerRepository;
 import com.superdo.ai.repository.NoteRepository;
 import com.superdo.ai.repository.RentRecordRepository;
@@ -29,6 +31,7 @@ public class GlobalSearchService {
     private final ExpenseRepository expenseRepository;
     private final RentRecordRepository rentRecordRepository;
     private final MarriagePlannerRepository marriagePlannerRepository;
+    private final LoanRepository loanRepository;
     private final CustomSectionRepository customSectionRepository;
     private final CustomSectionEntryRepository customSectionEntryRepository;
 
@@ -36,12 +39,14 @@ public class GlobalSearchService {
                                ExpenseRepository expenseRepository,
                                RentRecordRepository rentRecordRepository,
                                MarriagePlannerRepository marriagePlannerRepository,
+                               LoanRepository loanRepository,
                                CustomSectionRepository customSectionRepository,
                                CustomSectionEntryRepository customSectionEntryRepository) {
         this.noteRepository = noteRepository;
         this.expenseRepository = expenseRepository;
         this.rentRecordRepository = rentRecordRepository;
         this.marriagePlannerRepository = marriagePlannerRepository;
+        this.loanRepository = loanRepository;
         this.customSectionRepository = customSectionRepository;
         this.customSectionEntryRepository = customSectionEntryRepository;
     }
@@ -83,6 +88,12 @@ public class GlobalSearchService {
                 : marriagePlannerRepository.findByUserIdOrderByEventDateAsc(userId).stream()
                         .limit(MAX_RESULTS_PER_CATEGORY).toList();
 
+        List<Loan> loans = hasQuery
+                ? loanRepository.searchByUserId(userId, normalizedQuery).stream()
+                        .limit(MAX_RESULTS_PER_CATEGORY).toList()
+                : loanRepository.findByUserIdOrderByStartDateAsc(userId).stream()
+                        .limit(MAX_RESULTS_PER_CATEGORY).toList();
+
         // Custom sections – filter in Java since schema_json is JSONB with arbitrary structure
         List<CustomSection> allSections = customSectionRepository.findByUserIdOrderByUpdatedAtDesc(userId);
         List<CustomSection> customSections = allSections.stream()
@@ -99,6 +110,7 @@ public class GlobalSearchService {
                 .toList();
 
         int totalMatches = notes.size() + expenses.size() + rentRecords.size()
+                + loans.size()
                 + marriagePlannerItems.size() + customSections.size() + customEntries.size();
 
         Map<String, Object> result = new LinkedHashMap<>();
@@ -106,6 +118,7 @@ public class GlobalSearchService {
         result.put("notes",          notes);
         result.put("expenses",       expenses);
         result.put("rentRecords",    rentRecords);
+        result.put("loans",          loans);
         result.put("marriagePlanner", marriagePlannerItems);
         result.put("customSections", customSections);
         result.put("customEntries",  customEntries);

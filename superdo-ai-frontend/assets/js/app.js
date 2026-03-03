@@ -4,6 +4,8 @@ $(function () {
         expenses: [],
         rent: [],
         marriage: [],
+        loans: [],
+        loanSummary: null,
         sections: [],
         entries: {},
         timer: null,
@@ -87,9 +89,10 @@ $(function () {
         const loadExpenses = ctx.modules.expenses?.loadExpenses || resolvedPromise;
         const loadRent = ctx.modules.rent?.loadRent || resolvedPromise;
         const loadMarriage = ctx.modules.rent?.loadMarriage || resolvedPromise;
+        const loadLoans = ctx.modules.loans?.loadLoans || resolvedPromise;
         const loadSections = ctx.modules.custom?.loadSections || resolvedPromise;
 
-        $.when(loadNotes(), loadExpenses(), loadRent(), loadMarriage(), loadSections()).done(() => {
+        $.when(loadNotes(), loadExpenses(), loadRent(), loadMarriage(), loadLoans(), loadSections()).done(() => {
             ctx.renderDashboard();
             ctx.remind();
         });
@@ -106,6 +109,7 @@ $(function () {
     if (modules.expenses?.init) modules.expenses.init(ctx);
     if (modules.search?.init) modules.search.init(ctx);
     if (modules.rent?.init) modules.rent.init(ctx);
+    if (modules.loans?.init) modules.loans.init(ctx);
     if (modules.custom?.init) modules.custom.init(ctx);
     if (modules.auth?.init) modules.auth.init(ctx);
 });

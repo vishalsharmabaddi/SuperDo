@@ -25,6 +25,7 @@ public class DatabaseConfig {
         hikariConfig.setMaxLifetime(properties.getPool().getMaxLifetimeMs());
         hikariConfig.setConnectionTimeout(properties.getPool().getConnectionTimeoutMs());
         hikariConfig.setValidationTimeout(properties.getPool().getValidationTimeoutMs());
+        hikariConfig.setKeepaliveTime(properties.getPool().getKeepaliveTimeMs());
         hikariConfig.setConnectionTestQuery("SELECT 1");
         hikariConfig.setInitializationFailTimeout(1);
         hikariConfig.addDataSourceProperty("reWriteBatchedInserts", "true");

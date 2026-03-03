@@ -26,7 +26,7 @@ public class RentRecord extends BaseEntity {
     private Long id;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -36,11 +36,11 @@ public class RentRecord extends BaseEntity {
     @Column(length = 200)
     private String landlordName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payer_party_id")
     private RentParty payerParty;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_party_id")
     private RentParty receiverParty;
 
@@ -78,9 +78,15 @@ public class RentRecord extends BaseEntity {
     @JsonProperty("receiverPartyId")
     public Long getReceiverPartyId() { return receiverParty == null ? null : receiverParty.getId(); }
     @JsonProperty("payerDisplayName")
-    public String getPayerDisplayName() { return payerParty == null ? null : payerParty.getDisplayName(); }
+    public String getPayerDisplayName() {
+        if (tenantName != null && !tenantName.isBlank()) return tenantName;
+        return payerParty == null ? null : payerParty.getDisplayName();
+    }
     @JsonProperty("receiverDisplayName")
-    public String getReceiverDisplayName() { return receiverParty == null ? null : receiverParty.getDisplayName(); }
+    public String getReceiverDisplayName() {
+        if (landlordName != null && !landlordName.isBlank()) return landlordName;
+        return receiverParty == null ? null : receiverParty.getDisplayName();
+    }
     public BigDecimal getRentAmount() { return rentAmount; }
     public void setRentAmount(BigDecimal rentAmount) { this.rentAmount = rentAmount; }
     public LocalDate getDueDate() { return dueDate; }

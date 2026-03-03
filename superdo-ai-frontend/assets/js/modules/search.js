@@ -11,6 +11,7 @@
                         ["notes", "Notes", x => x.title || x.content || "Note"],
                         ["rentRecords", "Rent", x => `${x.monthKey || "Rent"} - ${x.paymentStatus || ""}`],
                         ["expenses", "Expenses", x => `${x.category || "Category"} - ${x.amount || 0}`],
+                        ["loans", "Loans", x => `${x.loanName || "Loan"} - ${x.lenderName || ""}`],
                         ["marriagePlanner", "Celebrations", x => x.eventName || x.vendorName || "Item"],
                         ["customSections", "Custom Sections", x => x.name || "Section"],
                         ["customEntries", "Custom Entries", x => x.dataJson || "Entry"]

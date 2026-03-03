@@ -85,9 +85,9 @@
                     e.preventDefault();
                     $("#globalSearch").trigger("focus");
                 }
-                if (e.altKey && /^[1-6]$/.test(e.key)) {
+                if (e.altKey && /^[1-7]$/.test(e.key)) {
                     e.preventDefault();
-                    const map = { "1": "dashboard", "2": "notes", "3": "rent", "4": "marriage", "5": "expenses", "6": "custom" };
+                    const map = { "1": "dashboard", "2": "notes", "3": "rent", "4": "marriage", "5": "expenses", "6": "loans", "7": "custom" };
                     ctx.section(map[e.key]);
                 }
             });

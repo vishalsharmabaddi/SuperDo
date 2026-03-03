@@ -93,22 +93,25 @@ public class DatabaseProperties {
         private String poolName = "superdo-hikari-pool";
 
         @Min(1)
-        private int minimumIdle = 5;
+        private int minimumIdle = 1;
 
         @Min(2)
-        private int maximumPoolSize = 20;
+        private int maximumPoolSize = 3;
 
         @Min(10000)
-        private long idleTimeoutMs = 600000L;
+        private long idleTimeoutMs = 30000L;
 
         @Min(30000)
-        private long maxLifetimeMs = 1800000L;
+        private long maxLifetimeMs = 60000L;
 
         @Min(250)
         private long connectionTimeoutMs = 30000L;
 
         @Min(250)
         private long validationTimeoutMs = 5000L;
+
+        @Min(0)
+        private long keepaliveTimeMs = 25000L;
 
         @Min(0)
         private long leakDetectionThresholdMs = 0L;
@@ -167,6 +170,14 @@ public class DatabaseProperties {
 
         public void setValidationTimeoutMs(long validationTimeoutMs) {
             this.validationTimeoutMs = validationTimeoutMs;
+        }
+
+        public long getKeepaliveTimeMs() {
+            return keepaliveTimeMs;
+        }
+
+        public void setKeepaliveTimeMs(long keepaliveTimeMs) {
+            this.keepaliveTimeMs = keepaliveTimeMs;
         }
 
         public long getLeakDetectionThresholdMs() {

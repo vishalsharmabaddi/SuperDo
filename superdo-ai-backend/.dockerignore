@@ -1,0 +1,6 @@
+target/
+.git/
+.env
+.github/
+.githooks/
+*.md

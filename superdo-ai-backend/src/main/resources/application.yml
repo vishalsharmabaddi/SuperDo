@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: optional:file:.env[.properties]
+    import: optional:file:../.env[.properties]
   jpa:
     hibernate:
       ddl-auto: update
@@ -26,12 +26,13 @@ app:
     ssl-mode: ${DB_SSL_MODE:require}
     pool:
       pool-name: superdo-hikari-pool
-      minimum-idle: ${DB_POOL_MIN_IDLE:5}
-      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
-      idle-timeout-ms: ${DB_POOL_IDLE_TIMEOUT_MS:600000}
-      max-lifetime-ms: ${DB_POOL_MAX_LIFETIME_MS:1800000}
+      minimum-idle: ${DB_POOL_MIN_IDLE:1}
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:3}
+      idle-timeout-ms: ${DB_POOL_IDLE_TIMEOUT_MS:30000}
+      max-lifetime-ms: ${DB_POOL_MAX_LIFETIME_MS:60000}
       connection-timeout-ms: ${DB_POOL_CONNECTION_TIMEOUT_MS:30000}
       validation-timeout-ms: ${DB_POOL_VALIDATION_TIMEOUT_MS:5000}
+      keepalive-time-ms: ${DB_POOL_KEEPALIVE_TIME_MS:25000}
       leak-detection-threshold-ms: ${DB_POOL_LEAK_DETECTION_THRESHOLD_MS:0}
   jwt:
     secret: ${JWT_SECRET:change-this-to-a-long-secure-secret-at-least-256-bits-change-in-production}

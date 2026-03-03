@@ -194,6 +194,7 @@ public class AuthService {
         return new AuthConfigResponse(googleEnabled ? googleClientId : null, googleEnabled);
     }
 
+    @Transactional(readOnly = true)
     public String resolveEmailByRefreshToken(String refreshToken) {
         if (refreshToken == null || refreshToken.isBlank()) {
             return null;

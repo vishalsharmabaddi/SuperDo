@@ -23,11 +23,11 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, columnDefinition = "varchar(32) default 'USER'")
+    @Column(name = "role", nullable = false, columnDefinition = "varchar(32)")
     private UserRole role = UserRole.USER;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "auth_provider", nullable = false, columnDefinition = "varchar(32) default 'LOCAL'")
+    @Column(name = "auth_provider", nullable = false, columnDefinition = "varchar(32)")
     private AuthProvider authProvider = AuthProvider.LOCAL;
 
     @Column(name = "google_subject")

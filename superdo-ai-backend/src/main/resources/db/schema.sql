@@ -138,6 +138,36 @@ CREATE TABLE IF NOT EXISTS custom_section_entries (
     CONSTRAINT fk_custom_entries_section FOREIGN KEY (section_id) REFERENCES custom_sections(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS loans (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    loan_name VARCHAR(255) NOT NULL,
+    lender_name VARCHAR(255) NOT NULL,
+    loan_type VARCHAR(32) NOT NULL,
+    total_loan_amount NUMERIC(12, 2) NOT NULL,
+    interest_rate_annual NUMERIC(7, 4) NOT NULL,
+    tenure_months INTEGER NOT NULL,
+    start_date DATE NOT NULL,
+    emi_due_day INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_loans_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS loan_payments (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    loan_id BIGINT NOT NULL,
+    paid_date DATE NOT NULL,
+    amount NUMERIC(12, 2) NOT NULL,
+    is_extra_payment BOOLEAN NOT NULL DEFAULT FALSE,
+    note VARCHAR(500),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_loan_payments_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_loan_payments_loan FOREIGN KEY (loan_id) REFERENCES loans(id) ON DELETE CASCADE
+);
+
 -- ---------------------------------------------------------------------------
 -- Indexes for common user-scoped query patterns
 -- ---------------------------------------------------------------------------
@@ -161,3 +191,9 @@ CREATE INDEX IF NOT EXISTS idx_custom_sections_user_updated_at
 
 CREATE INDEX IF NOT EXISTS idx_custom_entries_user_section_updated_at
     ON custom_section_entries(user_id, section_id, updated_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_loans_user_start_date
+    ON loans(user_id, start_date ASC);
+
+CREATE INDEX IF NOT EXISTS idx_loan_payments_user_loan_paid_date
+    ON loan_payments(user_id, loan_id, paid_date DESC);

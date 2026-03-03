@@ -85,17 +85,32 @@
             }
 
             function loadAuthConfig() {
-                return $.ajax({
-                    url: "http://localhost:8081/api/auth/config",
-                    method: "GET",
-                    dataType: "json",
-                    xhrFields: { withCredentials: true }
-                }).done(config => {
-                    ctx.state.authConfig = config;
-                    startGoogleInitWatcher();
-                }).fail(() => {
-                    showGoogleUnavailable();
-                });
+                const deferred = $.Deferred();
+                const MAX_RETRIES = 6;
+                const RETRY_DELAY_MS = 3000;
+
+                function attempt(retriesLeft) {
+                    $.ajax({
+                        url: API_BASE + "/auth/config",
+                        method: "GET",
+                        dataType: "json",
+                        xhrFields: { withCredentials: true }
+                    }).done(config => {
+                        ctx.state.authConfig = config;
+                        startGoogleInitWatcher();
+                        deferred.resolve();
+                    }).fail(() => {
+                        if (retriesLeft > 0) {
+                            setTimeout(() => attempt(retriesLeft - 1), RETRY_DELAY_MS);
+                        } else {
+                            showGoogleUnavailable();
+                            deferred.reject();
+                        }
+                    });
+                }
+
+                attempt(MAX_RETRIES);
+                return deferred.promise();
             }
 
             function bootstrapSession() {
