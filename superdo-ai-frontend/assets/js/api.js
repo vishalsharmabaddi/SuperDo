@@ -1,5 +1,5 @@
 const DEV_PORTS = ["3000", "5173", "5500"];
-const PROD_API  = "https://superdo-backend-latest.onrender.com/api";
+const PROD_API  = "https://superdo.onrender.com/api";
 
 const API_BASE = DEV_PORTS.includes(window.location.port)
     ? "http://localhost:8081/api"       // local dev (Live Server / Vite)
