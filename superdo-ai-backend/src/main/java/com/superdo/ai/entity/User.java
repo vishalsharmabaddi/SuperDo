@@ -36,6 +36,40 @@ public class User extends BaseEntity {
     @Column(name = "email_verified", nullable = false, columnDefinition = "boolean default false")
     private boolean emailVerified = false;
 
+    //Ai assistant
+    @Column(name = "claude_api_key")
+    private String claudeApiKey;
+
+    @Column(name = "openai_api_key")
+    private String openaiApiKey;
+
+    @Column(name = "preferred_ai")
+    private String preferredAi;
+
+    public String getClaudeApiKey() {
+        return claudeApiKey;
+    }
+
+    public void setClaudeApiKey(String claudeApiKey) {
+        this.claudeApiKey = claudeApiKey;
+    }
+
+    public String getOpenaiApiKey() {
+        return openaiApiKey;
+    }
+
+    public void setOpenaiApiKey(String openaiApiKey) {
+        this.openaiApiKey = openaiApiKey;
+    }
+
+    public String getPreferredAi() {
+        return preferredAi;
+    }
+
+    public void setPreferredAi(String preferredAi) {
+        this.preferredAi = preferredAi;
+    }
+
     public Long getId() {
         return id;
     }

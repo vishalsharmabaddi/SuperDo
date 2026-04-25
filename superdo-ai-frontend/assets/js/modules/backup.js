@@ -22,6 +22,9 @@
                 ctx.toast("Backup exported");
             }
 
+            window.SuperDoActions = window.SuperDoActions || {};
+            window.SuperDoActions.exportBackup = exportBackup;
+
             $("#exportBackupBtn").on("click", exportBackup);
         }
     };

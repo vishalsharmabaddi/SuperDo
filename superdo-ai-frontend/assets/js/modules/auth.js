@@ -34,7 +34,10 @@
                         if (!response.credential) return;
                         ctx.call("POST", "/auth/google", { idToken: response.credential }, null).done(r => {
                             api.setAccessToken(r.accessToken);
+                            if (r.fullName) localStorage.setItem("userName", r.fullName);
+                            if (r.email) localStorage.setItem("userEmail", r.email);
                             $("#authModal").addClass("hidden");
+                            window.initSidebarProfile?.();
                             ctx.loadAll();
                             ctx.toast("Logged in with Google");
                         });
@@ -129,14 +132,16 @@
                 return api.refreshSession().done(() => ctx.loadAll());
             }
 
-            $("#openAuthModal").on("click", () => $("#authModal").removeClass("hidden"));
-            $("#closeAuthModal").on("click", () => $("#authModal").addClass("hidden"));
-            $("#logoutBtn").on("click", () => {
+            function performLogout() {
                 api.request("POST", "/auth/logout", {}, null, false).always(() => {
                     api.clearAccessToken();
                     location.reload();
                 });
-            });
+            }
+
+            $("#openAuthModal").on("click", () => $("#authModal").removeClass("hidden"));
+            $("#closeAuthModal").on("click", () => $("#authModal").addClass("hidden"));
+            $("#logoutBtn, #profileQuickLogout").on("click", performLogout);
 
             $("#registerBtn").on("click", () => {
                 const fullName = ctx.req($("#fullName").val().trim(), "Full name"); if (!fullName) return;
@@ -144,7 +149,10 @@
                 const password = ctx.req($("#password").val(), "Password"); if (!password) return;
                 ctx.call("POST", "/auth/register", { fullName, email, password }).done(r => {
                     api.setAccessToken(r.accessToken);
+                    if (r.fullName) localStorage.setItem("userName", r.fullName);
+                    if (r.email) localStorage.setItem("userEmail", r.email);
                     $("#authModal").addClass("hidden");
+                    window.initSidebarProfile?.();
                     ctx.loadAll();
                     ctx.toast("Registered");
                 });
@@ -155,7 +163,10 @@
                 const password = ctx.req($("#password").val(), "Password"); if (!password) return;
                 ctx.call("POST", "/auth/login", { email, password }).done(r => {
                     api.setAccessToken(r.accessToken);
+                    if (r.fullName) localStorage.setItem("userName", r.fullName);
+                    if (r.email) localStorage.setItem("userEmail", r.email);
                     $("#authModal").addClass("hidden");
+                    window.initSidebarProfile?.();
                     ctx.loadAll();
                     ctx.toast("Logged in");
                 });

@@ -18,8 +18,10 @@ const api = {
         try {
             if (token) {
                 sessionStorage.setItem("superdo_access", token);
+                localStorage.setItem("token", token);
             } else {
                 sessionStorage.removeItem("superdo_access");
+                localStorage.removeItem("token");
             }
         } catch (_) { /* private browsing */ }
     },
@@ -29,13 +31,18 @@ const api = {
         try {
             const stored = sessionStorage.getItem("superdo_access");
             if (stored) { this._accessToken = stored; return stored; }
+            const legacyToken = localStorage.getItem("token");
+            if (legacyToken) { this._accessToken = legacyToken; return legacyToken; }
         } catch (_) {}
         return null;
     },
 
     clearAccessToken() {
         this._accessToken = null;
-        try { sessionStorage.removeItem("superdo_access"); } catch (_) {}
+        try {
+            sessionStorage.removeItem("superdo_access");
+            localStorage.removeItem("token");
+        } catch (_) {}
     },
 
     refreshSession() {

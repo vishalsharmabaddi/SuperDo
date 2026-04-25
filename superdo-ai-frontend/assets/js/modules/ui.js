@@ -3,6 +3,15 @@
 
     window.SuperDoModules.ui = {
         init(ctx) {
+            function toggleTheme() {
+                const dark = !$("body").hasClass("dark");
+                $("body").toggleClass("dark", dark);
+                localStorage.setItem("superdo_theme", dark ? "dark" : "light");
+            }
+
+            window.SuperDoActions = window.SuperDoActions || {};
+            window.SuperDoActions.toggleTheme = toggleTheme;
+
             $(".nav-btn").on("click", function () { ctx.section($(this).data("section")); });
 
             const $content = $(".content");
@@ -70,11 +79,7 @@
                 $("#sidebarOverlay").removeClass("active");
             });
 
-            $("#themeToggle").on("click", () => {
-                const dark = !$("body").hasClass("dark");
-                $("body").toggleClass("dark", dark);
-                localStorage.setItem("superdo_theme", dark ? "dark" : "light");
-            });
+            $("#themeToggle").on("click", toggleTheme);
 
             $(document).on("keydown", e => {
                 if (e.ctrlKey && e.key.toLowerCase() === "m") {

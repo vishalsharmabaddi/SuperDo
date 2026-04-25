@@ -103,6 +103,7 @@ $(function () {
     const modules = window.SuperDoModules || {};
     if (modules.ui?.init) modules.ui.init(ctx);
     if (modules.profile?.init) modules.profile.init(ctx);
+    if (modules.ai?.init) modules.ai.init(ctx);
     if (modules.backup?.init) modules.backup.init(ctx);
     if (modules.dashboard?.init) modules.dashboard.init(ctx);
     if (modules.notes?.init) modules.notes.init(ctx);

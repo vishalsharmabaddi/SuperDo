@@ -7,9 +7,16 @@ CREATE TABLE IF NOT EXISTS users (
     auth_provider VARCHAR(32) NOT NULL DEFAULT 'LOCAL',
     google_subject VARCHAR(255) UNIQUE,
     email_verified BOOLEAN NOT NULL DEFAULT FALSE,
+    claude_api_key VARCHAR(255),
+    openai_api_key VARCHAR(255),
+    preferred_ai VARCHAR(32),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS claude_api_key VARCHAR(255);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS openai_api_key VARCHAR(255);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS preferred_ai VARCHAR(32);
 
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id BIGSERIAL PRIMARY KEY,

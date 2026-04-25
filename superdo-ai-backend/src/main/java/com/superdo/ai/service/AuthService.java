@@ -362,4 +362,43 @@ public class AuthService {
     private record TokenPair(String plainToken, long maxAgeSeconds) { }
 
     private record GoogleUserInfo(String sub, String email, String name, boolean emailVerified) { }
+
+
+    public void saveApiKeys(String email, String claudeKey,
+                        String openaiKey, String preferredAi) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+    String selectedAi = hasText(preferredAi) ? preferredAi.trim() : null;
+
+    if (hasText(selectedAi)) {
+        user.setPreferredAi(selectedAi);
+    }
+
+    if (hasText(claudeKey)) {
+        user.setClaudeApiKey(claudeKey.trim());
+    }
+
+    if (hasText(openaiKey)) {
+        user.setOpenaiApiKey(openaiKey.trim());
+    }
+
+    userRepository.save(user);
+}
+
+public Map<String, Object> getApiKeyStatus(String email) {
+    User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return Map.of(
+        "hasClaudeKey", hasText(user.getClaudeApiKey()),
+        "hasOpenaiKey", hasText(user.getOpenaiApiKey()),
+        "preferredAi", hasText(user.getPreferredAi()) ?
+                       user.getPreferredAi().trim() : "claude"
+    );
+}
+
+private boolean hasText(String value) {
+    return value != null && !value.trim().isEmpty();
+}
 }
